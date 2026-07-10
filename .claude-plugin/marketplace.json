@@ -1,0 +1,18 @@
+{
+  "name": "choria",
+  "owner": {
+    "name": "Choria",
+    "url": "https://github.com/choria-io"
+  },
+  "metadata": {
+    "description": "Claude Code plugins and skills for Choria and Go tooling",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "codemap",
+      "source": "./plugins/codemap",
+      "description": "Generate polished 'code map' documentation for Go repositories, either a standalone static HTML site or native Hugo/relearn content."
+    }
+  ]
+}

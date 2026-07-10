@@ -1,0 +1,12 @@
+{
+  "name": "codemap",
+  "description": "Generate 'code map' documentation for Go repositories: a standalone static HTML site (go-codemap) or native Hugo/relearn content (go-codemap-hugo).",
+  "version": "1.0.0",
+  "author": {
+    "name": "R.I. Pienaar",
+    "email": "rip@devco.net"
+  },
+  "homepage": "https://github.com/choria-io/agent-plugins",
+  "repository": "https://github.com/choria-io/agent-plugins",
+  "license": "Apache-2.0"
+}
