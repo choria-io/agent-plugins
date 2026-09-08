@@ -1,0 +1,12 @@
+{
+  "name": "presentmd",
+  "description": "Write slide decks and themes for presentmd, which renders a directory of markdown as a reveal.js talk: interview and build a deck (presentation) or build the theme that renders one (theme).",
+  "version": "1.0.0",
+  "author": {
+    "name": "R.I. Pienaar",
+    "email": "rip@devco.net"
+  },
+  "homepage": "https://github.com/ripienaar/presentmd",
+  "repository": "https://github.com/ripienaar/presentmd",
+  "license": "Apache-2.0"
+}

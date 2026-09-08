@@ -13,6 +13,11 @@
       "name": "codemap",
       "source": "./plugins/codemap",
       "description": "Generate polished 'code map' documentation for Go repositories, either a standalone static HTML site or native Hugo/relearn content."
+    },
+    {
+      "name": "presentmd",
+      "source": "./plugins/presentmd",
+      "description": "Write slide decks and themes for presentmd, which renders a directory of markdown as a reveal.js talk."
     }
   ]
 }

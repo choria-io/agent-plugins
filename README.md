@@ -44,3 +44,16 @@ skills so you can pick the output format:
 
 Once installed, invoke by asking Claude to "create a code map" (or "codemap") for a Go repo,
 or call a skill directly, e.g. `/codemap:go-codemap`.
+
+### `presentmd`
+
+Writes slide decks and themes for [presentmd](https://github.com/ripienaar/presentmd), which
+renders a directory of markdown as a reveal.js talk. Bundles two skills:
+
+| Skill          | Output                                                                                                       |
+|----------------|--------------------------------------------------------------------------------------------------------------|
+| `presentation` | A deck directory: `presentation.yaml` and one markdown file per slide, rendered and checked before hand off.  |
+| `theme`        | A theme directory: `theme.yaml`, `theme.css` and one jet template per page style.                            |
+
+Once installed, invoke by asking Claude for a presentation or a slide deck, or call a skill
+directly, e.g. `/presentmd:presentation`.
