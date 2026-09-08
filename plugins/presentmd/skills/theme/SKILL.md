@@ -11,9 +11,12 @@ description: >
 
 # Writing a presentmd theme
 
-A theme is a directory. A deck reaches it by path, `theme: ./mytheme` in `presentation.yaml`,
-resolved against the deck directory, and the theme is watched along with the deck so editing it
-reloads the browser.
+A theme is a directory. A deck reaches it by path, `theme: ./mytheme` in its `presentation.yaml`
+or in the frontmatter of its `presentation.md`, resolved against the deck directory, and the
+theme is watched along with the deck so editing it reloads the browser.
+
+`presentmd serve --theme ./mytheme <deck>` renders a deck through the theme without editing the
+deck, which is how to point an existing deck at the theme you are working on.
 
 ```
 mytheme/
