@@ -11,9 +11,9 @@ description: >
 
 # Writing a presentmd theme
 
-A theme is a directory. A deck reaches it by path, `theme: ./mytheme` in its `presentation.yaml`
-or in the frontmatter of its `presentation.md`, resolved against the deck directory, and the
-theme is watched along with the deck so editing it reloads the browser.
+A theme is a directory. A deck reaches it by path, `theme: ./mytheme` in the frontmatter of its
+`presentation.md`, resolved against the deck directory, and the theme is watched along with the
+deck so editing it reloads the browser.
 
 `presentmd serve --theme ./mytheme <deck>` renders a deck through the theme without editing the
 deck, which is how to point an existing deck at the theme you are working on.
@@ -114,7 +114,7 @@ element leaves an empty box on every slide that has no caption.
 
 ## The CSS a theme has to get right
 
-Four things are not obvious, and each one produces a bug that only shows up in a particular
+Five things are not obvious, and each one produces a bug that only shows up in a particular
 slide or a particular moment.
 
 **Paint the ground on the viewport alone.**
@@ -155,6 +155,25 @@ full height of the page compounds the two and drops the footer off the bottom.
   .print-pdf .reveal .slides section { top: 0 !important; height: 100% !important; }
 }
 ```
+
+**Name the colours a slide asks for by role.** A slide colours a run of words with
+`{{accent}}`, `{{muted}}`, `{{good}}` and `{{bad}}`, and writes a task list with `- [ ]`. The
+page carries the rules for both ahead of your stylesheet, coloured from `--accent` and
+`--ink-3`, so a theme that says nothing about them still renders them. Say it anyway: the green
+that reads on a dark ground is not the one that reads on a light one, and the fallbacks for
+`good` and `bad` know nothing about your palette.
+
+```css
+:root {
+  --tint-muted: #9a9e93;        /* an aside; not so close to the body that it reads as body */
+  --tint-good: #2e7d4f;
+  --tint-bad: #b23c2f;
+  --check-box: var(--accent-3); /* an empty checkbox */
+  --check-mark: var(--accent);  /* a ticked one */
+}
+```
+
+`--tint-accent` defaults to `--accent`, which is usually what it should be.
 
 ## Fonts
 

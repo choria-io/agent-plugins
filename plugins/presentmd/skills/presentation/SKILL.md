@@ -1,9 +1,9 @@
 ---
 name: presentation
 description: >
-  Build a presentmd slide deck: interview the person about the talk, then write the deck into
-  a directory, as one presentation.md or as presentation.yaml with a file per slide, and render
-  it to check every slide fits. Use this whenever someone asks for a presentation, a slide deck, a
+  Build a presentmd slide deck: interview the person about the talk, then write the deck as one
+  presentation.md in a directory, and render it to check every slide fits. Use this whenever
+  someone asks for a presentation, a slide deck, a
   talk, a keynote, slides for a conference or a meeting, or asks to turn notes, a README or a
   design document into slides. Use it also when they ask to add slides to a deck that already
   exists, or to restructure one. It covers the deck format, the seven page styles, and the
@@ -12,11 +12,8 @@ description: >
 
 # Writing a presentmd deck
 
-A deck is a directory, holding the talk and an `images/` directory for whatever the slides
-point at. The binary reads it; this skill writes it.
-
-The talk itself is written either way. One file, which is what to write unless the person says
-otherwise:
+A deck is a directory, holding the talk as one `presentation.md` and an `images/` directory for
+whatever the slides point at. The binary reads it; this skill writes it.
 
 ```
 mydeck/
@@ -48,24 +45,12 @@ The frontmatter at the top is the presentation. A `+++` on its own line opens a 
 closes that slide's frontmatter, and everything under it to the next `+++` is the body. Order in
 the file is the order of the talk, so there are no numbers to keep in step.
 
-Or a file per slide, which suits a deck long enough that moving a slide means moving a file, and
-is what to keep writing when the deck already is one:
-
-```
-mydeck/
-  presentation.yaml
-  01-title.md
-  02-what-it-is.md
-  images/diagram.svg
-```
-
-`presentation.yaml` holds what the single file writes as its top frontmatter, without the
-fences, and each numbered file holds one slide's frontmatter and body.
-
-Write a deck one way or the other. A directory holding `presentation.md` is read that way and
-the markdown beside it is not searched for slides, and a `presentation.yaml` left there is
-reported as a problem, which `render` refuses to write past. Converting a deck means moving it
-rather than leaving both.
+The binary also reads an older form, `presentation.yaml` beside one numbered markdown file per
+slide. Do not write it. A deck found in that form is rewritten as one `presentation.md` before
+anything is added to it: the yaml becomes the top frontmatter, each file becomes a slide in
+filename order with its `---` fences replaced by `+++`, and the yaml and the numbered files are
+removed, since a `presentation.yaml` left beside a `presentation.md` is reported as a problem
+that `render` refuses to write past.
 
 Serve it with `presentmd serve mydeck`, which reloads the browser as you save. Write it as one
 self contained HTML file with `presentmd render mydeck talk.html`. Either command takes
@@ -87,7 +72,9 @@ Ask about:
   most often forget to give.
 - **The event and the date**, as they should appear on the title slide.
 - **The presenter**: name, surname, and the contacts to show, `contact_email`, `contact_web`,
-  `contact_social` with `contact_social_network` naming the network the handle is on.
+  `contact_social` with `contact_social_network` naming the network the handle is on. The
+  closing slide labels the web address `blog`, so set `contact_web_label` when it is a
+  homepage or a docs site instead.
 - **An avatar**, a file in the deck directory, or a GitHub handle to build one from.
 - **Where the deck goes**, if the working directory does not make it obvious.
 
@@ -106,10 +93,6 @@ when the person says otherwise.
   `footer` replaces that line rather than adding to it, so set one or the other.
 - Roughly one slide per minute of the slot, counting the title and the closing. A twenty
   minute talk is about twenty slides. Section dividers are cheap and worth their place.
-- One `presentation.md`, which keeps the whole talk in front of you as you write it. Add to a
-  deck that already exists in the form it is already in.
-- In the file per slide form, filenames numbered `01-`, `02-` in tens if the deck is long enough
-  that inserting a slide later is likely.
 
 ## The shape of a talk
 
@@ -135,9 +118,24 @@ Every slide names a `page_style`, which is the only required key. The rest:
 The body's first level one heading is the slide's heading and the rest is the content. The
 theme places the presenter, the contacts and the footer, so no slide writes them.
 
-In a `presentation.md` the frontmatter is fenced with `+++` rather than `---`, since a `---`
-inside a body already means a thematic break. In a file per slide it is fenced with `---` as
-usual, and `slide:` overrides the number the filename gives.
+## Colouring a word
+
+A run of words takes a colour from the theme: `The {{accent}}fast{{/}} path`, and the same for
+`{{muted}}`, `{{good}}` and `{{bad}}`, each closed by a bare `{{/}}`. They work in the body, a
+heading, a `caption` and a `cta`. Markdown inside one still works, `{{good}}with **bold**{{/}}`.
+
+Colour a word or two, never a bullet and never a sentence: the point is the one word the room
+should carry out, and a coloured line is a line nobody reads twice. Use it for the term a talk
+turns on, a value that is good or bad, an aside the audience can skip. This replaces raw
+`<font color="orange">`, which still passes through and should not be written.
+
+The four names are the whole set. A name outside it, and a role opened and never closed, stay on
+the slide as written and are reported by `render`. Text that means the braces escapes the first
+one, `\{{name}}`; a code span and a fenced block are never read for tints, so a deck about
+templating writes its `{{ }}` in code as usual.
+
+Notes are the exception: the speaker view carries none of the deck's stylesheets, so a tint in
+`notes:` is plain text there.
 
 ## The seven page styles
 
@@ -153,9 +151,9 @@ usual, and `slide:` overrides the number the filename gives.
 
 A `---` on a line of its own divides the body only in a page style the theme splits, which for
 the shipped theme is `columns`. In every other style it is a horizontal rule, and a second
-break in a splitting slide is reported as a problem. This is why a `presentation.md` breaks its
-slides at `+++`: a `---` on its own line is already the divider inside one. A `+++` inside a
-fenced code block is the deck's own text and does not end the slide.
+break in a splitting slide is reported as a problem. This is why a slide's frontmatter is fenced
+with `+++` and not `---`: a `---` on its own line is already the divider inside one. A `+++`
+inside a fenced code block is the deck's own text and does not end the slide.
 
 ## How much fits on a slide
 
@@ -201,9 +199,9 @@ presentmd render <deck> /tmp/deck.html
 ```
 
 Every problem it prints is a slide that will be wrong in front of an audience: a page style the
-theme does not have, a missing `page_style`, two slides claiming the same number, a second
-thematic break. Fix all of them. A problem in a `presentation.md` names the line the slide opens
-on, `presentation.md:22`, which is the `+++` above it.
+theme does not have, a missing `page_style`, a second thematic break, a tint whose name is not
+one of the four. Fix all of them. A problem names the line the slide opens on,
+`presentation.md:22`, which is the `+++` above it.
 
 Rendering proves the deck loads. It does not prove the slides fit, which is the failure this
 skill exists to prevent. When Chrome is available, look at them:
